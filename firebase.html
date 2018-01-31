@@ -1,0 +1,118 @@
+<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+
+
+<input id="file" style="margin-left:15em;margin-bottom:2em;" name="myFile" type="file">
+
+
+<p style="margin-left:15em;">File name : :<input id="name" name="File Name" style="margin-bottom:2em; "></input></p>
+
+
+<p style="margin-left:15em;margin-bottom:2em;" >Course : :<select id="course">
+ <option value="-L4CxbhvPVI-6y4l6EZj">B.tech</option>
+ <option value="-L4Cxbi-boujxSQRsL7T">B.COM</option>
+ <option value="-L4Cxbi1hRBaQn_Elbak">Law</option>
+ <option value="-L4Cxbi3iEilfqSxknhS">BFA</option>
+</select> </p>
+<p  style="margin-left:15em;margin-bottom:2em;" >Branch : :<select id="branch">
+ <option value="-L4CytDvyzUhgsam5xkI">CCE</option>
+ <option value="-L4CytDq8L0QdL8WMScx">SCIT</option>
+ <option value="-L4CytDz3KnYCXOf3k_W">Mechenical</option>
+ <option value="-L4CytDx10IuLhCMKZP2">Electrical</option>
+ <option value="-L4CytE-XHbB0DLH7ATH">Automobile</option>
+ <option value="-L4CytE0su_nA5VZnKyn">CHEM</option>
+ <option value="-L4CytE1vztbbih8wepM">Civil</option>
+ <option value="-L4CytE2gmahOZxU0DDh">ECE</option>
+ <option value="-L4CytE3TkU1mUNA9t5F">Mechatronics</option>
+<option value="-L4CzI1x67tty0yIxo7z">Physics cycle</option>
+<option value="-L4CzI2154q_XTRNu4iV">Chemistry cycle</option>
+</select> </p>
+<br>
+
+<p  style="margin-left:15em;margin-bottom:2em;" >SEM : :<select id="sem">
+ <option value="1">1</option>
+ <option value="2">2</option>
+ <option value="3">3</option>
+ <option value="4">4</option>
+ <option value="5">5</option>
+ <option value="6">6</option>
+ <option value="7">7</option>
+ <option value="8">8</option>
+
+</select> </p>
+<br>
+
+
+<p style="margin-left:15em;">Subject name : :<input id="subj" name="File Name" style="margin-bottom:2em; "></input></p>
+
+
+
+<p  style="margin-left:15em;margin-bottom:2em;" >Type : :<select id="type">
+ <option value="1">Book</option>
+ <option value="2">Question Papers</option>
+ <option value="3">documents and notes</option>
+</select> </p>
+<br>
+<button onclick="func()" style="margin-left:15em;margin-bottom:2em;">Submit</button>
+
+
+<script>
+  // Initialize Firebase
+  // TODO: Replace with your project's customized code snippet
+
+
+
+  var config = {
+   apiKey: "AIzaSyA_68JWoqVhOEmp5Xi0D9F7yrbTgOhFMrM",
+   authDomain: "muj-files.firebaseapp.com",
+   databaseURL: "https://muj-files.firebaseio.com",
+   projectId: "muj-files",
+   storageBucket: "muj-files.appspot.com",
+   messagingSenderId: "87126743257"
+ };
+
+
+
+
+ function func(){
+    console.log(document.getElementById("file").files[0])
+
+    // var storage = firebase.storage();
+    var storageRef = firebase.storage().ref();
+    //
+    // var mountainsRef = storageRef.child(document.getElementById("file").value);
+
+
+    var file = document.getElementById("file").files[0] // use the Blob or File API
+
+    try {
+      storageRef.child(document.getElementById('name').value).put(file).then(function(snapshot) {
+        console.log(snapshot);
+         console.log(snapshot.metadata.downloadURLs[0]);
+          writeUserData(snapshot.metadata.downloadURLs[0])
+       });
+  }
+  catch(error) {
+    console.log(error);
+  }
+
+ }
+ firebase.initializeApp(config);
+ function writeUserData(url) {
+   firebase.database().ref().child("files").push().set({
+     name: document.getElementById('name').value,
+     url: url,
+     uploadedBy: "Vidhyanshu",
+     courseId: document.getElementById('course').value,
+     approvedStatus: false,
+     branchId: document.getElementById('branch').value,
+     semester: parseInt(document.getElementById('sem').value),
+     subject: document.getElementById('subj').value,
+     documentType: parseInt(document.getElementById('type').value),
+   }).then(function(){
+     alert("done")
+   });
+ }
+
+
+</script>
